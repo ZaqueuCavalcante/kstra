@@ -37,6 +37,12 @@ public class Game extends PApplet {
 
         }
 
+        if (keyCode >= 37 && keyCode <= 40) {
+            handleInput();
+        }
+    }
+
+    private void handleInput() {
         kstror.updateNeighbors(maze.getNeighbors(kstror.row, kstror.column));
         if (keyCode == 38) {
             kstror.up();
