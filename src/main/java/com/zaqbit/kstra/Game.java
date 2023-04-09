@@ -31,7 +31,7 @@ public class Game extends PApplet {
     }
 
     public void keyPressed() {
-        System.out.println(key + " " + keyCode);
+        // System.out.println(key + " " + keyCode);
 
         if (keyCode == 10) {
 
