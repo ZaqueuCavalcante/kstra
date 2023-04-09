@@ -43,6 +43,17 @@ public class Maze {
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+    public int[] getNeighbors(int row, int column) {
+        int up = (row - 1 < 0) ? CellType.OUT : cells[row - 1][column];
+        int right = (column + 1 >= columns) ? CellType.OUT : cells[row][column + 1];
+        int down = (row + 1 >= rows) ? CellType.OUT : cells[row + 1][column];
+        int left = (column - 1 < 0) ? CellType.OUT : cells[row][column - 1];
+
+        return new int[] { up, right, down, left };
+    }
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
     private boolean isRock(int row, int column) {
         return cells[row][column] == CellType.ROCK;
     }

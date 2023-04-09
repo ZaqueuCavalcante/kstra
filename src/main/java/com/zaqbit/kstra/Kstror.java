@@ -4,7 +4,7 @@ public class Kstror {
     public int row;
     public int column;
 
-    public int[][] options;
+    public int[] neighbors;
 
     public Kstror(int row, int column) {
         this.row = row;
@@ -12,23 +12,40 @@ public class Kstror {
     }
 
     public void draw(Game game) {
+        final int gc = game.CIZE;
+
         game.fill(219, 112, 147);
-        game.rect(column * game.CIZE, row * game.CIZE, game.CIZE, game.CIZE, game.CIZE / 4);
+        game.rect(column * gc, row * gc, gc, gc, gc / 4);
+
+        game.fill(255, 102, 102);
+        game.circle(column * gc + gc / 2, row * gc + gc / 2, gc / 2);
+    }
+
+    public void updateNeighbors(int[] neighbors) {
+        this.neighbors = neighbors;
     }
 
     public void up() {
-        row--;
+        if (neighbors[0] == CellType.EMPTY) {
+            row--;
+        }
     }
 
     public void right() {
-        column++;
+        if (neighbors[1] == CellType.EMPTY) {
+            column++;
+        }
     }
 
     public void down() {
-        row++;
+        if (neighbors[2] == CellType.EMPTY) {
+            row++;
+        }
     }
 
     public void left() {
-        column--;
+        if (neighbors[3] == CellType.EMPTY) {
+            column--;
+        }
     }
 }

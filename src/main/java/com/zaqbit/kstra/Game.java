@@ -1,7 +1,5 @@
 package com.zaqbit.kstra;
 
-import java.io.Console;
-
 import processing.core.PApplet;
 
 public class Game extends PApplet {
@@ -39,6 +37,7 @@ public class Game extends PApplet {
 
         }
 
+        kstror.updateNeighbors(maze.getNeighbors(kstror.row, kstror.column));
         if (keyCode == 38) {
             kstror.up();
         } else if (keyCode == 39) {
