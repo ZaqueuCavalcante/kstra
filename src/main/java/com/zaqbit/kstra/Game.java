@@ -1,5 +1,7 @@
 package com.zaqbit.kstra;
 
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 
 public class Game extends PApplet {
@@ -8,6 +10,7 @@ public class Game extends PApplet {
     private Maze maze;
 
     private Kstror kstror;
+    private Cell apple;
 
     public void settings() {
         CIZE = 80;
@@ -16,6 +19,10 @@ public class Game extends PApplet {
         maze = new Maze();
 
         kstror = new Kstror(5, 3);
+        maze.push(kstror);
+
+        apple = new Apple(0, 0);
+        maze.push(apple);
     }
 
     public void draw() {
@@ -26,13 +33,9 @@ public class Game extends PApplet {
         translate(CIZE / 2, CIZE / 2);
 
         maze.draw(this);
-
-        kstror.draw(this);
     }
 
     public void keyPressed() {
-        // System.out.println(key + " " + keyCode);
-
         if (keyCode == 10) {
 
         }
@@ -44,6 +47,14 @@ public class Game extends PApplet {
 
     private void handleInput() {
         kstror.updateNeighbors(maze.getNeighbors(kstror.row, kstror.column));
+
+        if (kstror.isParked()) {
+            return;
+        }
+
+        int oldRow = kstror.row;
+        int oldColumn = kstror.column;
+
         if (keyCode == 38) {
             kstror.up();
         } else if (keyCode == 39) {
@@ -52,6 +63,41 @@ public class Game extends PApplet {
             kstror.down();
         } else if (keyCode == 37) {
             kstror.left();
+        }
+
+        if (kstror.row == oldRow && kstror.column == oldColumn) {
+            return;
+        }
+
+        Cell belowCell = maze.cells[kstror.row][kstror.column].peek();
+        if (belowCell.type == CellType.EMPTY) {
+            maze.cells[kstror.row][kstror.column].push(maze.cells[oldRow][oldColumn].pop());
+        } else if (belowCell.type == CellType.APPLE) {
+            maze.cells[kstror.row][kstror.column].pop();
+
+            maze.pushRock(kstror.row, kstror.column);
+
+            maze.cells[kstror.row][kstror.column].push(maze.cells[oldRow][oldColumn].pop());
+
+            // Insert new apple
+            ArrayList<Integer> emptyCellsIds = new ArrayList<>();
+            for (int row = 0; row < maze.rows; row++) {
+                for (int column = 0; column < maze.columns; column++) {
+                    if (maze.cells[row][column].peek().type == CellType.EMPTY) {
+                        emptyCellsIds.add(maze.cellsIds[row][column]);
+                    }
+                }
+            }
+
+            int index = (int) (Math.random() * emptyCellsIds.size());
+            int newAppleCellId = emptyCellsIds.get(index);
+
+            int appleNewRow = maze.getCellRow(newAppleCellId);
+            int appleNewColumn = maze.getCellColumn(newAppleCellId);
+
+            apple.row = appleNewRow;
+            apple.column = appleNewColumn;
+            maze.push(apple);
         }
     }
 }

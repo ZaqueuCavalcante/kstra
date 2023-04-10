@@ -1,14 +1,11 @@
 package com.zaqbit.kstra;
 
-public class Kstror {
-    public int row;
-    public int column;
-
+public class Kstror extends Cell {
     public int[] neighbors;
 
     public Kstror(int row, int column) {
-        this.row = row;
-        this.column = column;
+        super(row, column);
+        type = CellType.KSTROR;
     }
 
     public void draw(Game game) {
@@ -25,26 +22,35 @@ public class Kstror {
         this.neighbors = neighbors;
     }
 
+    public boolean isParked() {
+        for (int i : neighbors) {
+            if (i == CellType.EMPTY || i == CellType.APPLE) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void up() {
-        if (neighbors[0] == CellType.EMPTY) {
+        if (neighbors[0] == CellType.EMPTY || neighbors[0] == CellType.APPLE) {
             row--;
         }
     }
 
     public void right() {
-        if (neighbors[1] == CellType.EMPTY) {
+        if (neighbors[1] == CellType.EMPTY || neighbors[1] == CellType.APPLE) {
             column++;
         }
     }
 
     public void down() {
-        if (neighbors[2] == CellType.EMPTY) {
+        if (neighbors[2] == CellType.EMPTY || neighbors[2] == CellType.APPLE) {
             row++;
         }
     }
 
     public void left() {
-        if (neighbors[3] == CellType.EMPTY) {
+        if (neighbors[3] == CellType.EMPTY || neighbors[3] == CellType.APPLE) {
             column--;
         }
     }
