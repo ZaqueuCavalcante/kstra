@@ -4,25 +4,21 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 
-import com.zaqbit.kstra.CellType;
+import com.zaqbit.kstra.Kstror;
 import com.zaqbit.kstra.Maze;
+import com.zaqbit.kstra.Maze00Wells5x5;
 
 public class KstrorIsParkedTests {
     @Test
     public void should_return_true_when_the_kstror_has_not_move_options() {
         // Arrange
-        Maze maze = new Maze();
+        Kstror kstror = new Kstror(0, 0);
+        Maze maze = new Maze00Wells5x5();
+        kstror.updateNeighbors(maze);
 
         // Assert
-        int appleCounter = 0;
-        for (int row = 0; row < maze.rows; row++) {
-            for (int column = 0; column < maze.columns; column++) {
-                if (maze.cells[row][column].peek().type == CellType.APPLE) {
-                    appleCounter++;
-                }
-            }
-        }
+        boolean isParked = kstror.isParked();
 
-        assertThat(appleCounter).isEqualTo(1);
+        assertThat(isParked).isTrue();
     }
 }

@@ -1,10 +1,15 @@
 package com.zaqbit.kstra;
 
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
+import processing.core.PApplet;
 import processing.core.PConstants;
 
-public class Maze {
+public abstract class Maze {
     public int rows;
     public int columns;
 
@@ -16,13 +21,16 @@ public class Maze {
 
     private Apple apple;
 
+    public abstract int[] getDrawSizes();
+
     public Maze() {
         loadInitialState();
         calculateCellsIds();
 
-        apple = new Apple(0, 0);
-        pushApple();
+        apple = new Apple(-1, -1);
     }
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
     public int getCellRow(int cellId) {
         return cellId / columns;
@@ -35,22 +43,57 @@ public class Maze {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
     private void loadInitialState() {
-        rows = 10;
-        columns = 10;
+        String className = this.getClass().getSimpleName();
 
-        cells = new CellStack[rows][columns];
-        for (int row = 0; row < rows; row++) {
-            for (int column = 0; column < columns; column++) {
-                cells[row][column] = new CellStack(new Empty(row, column));
+        File file = new File("src/mazes/" + className + ".txt");
+        InputStream input;
+        try {
+            input = new FileInputStream(file);
+
+            String[] lines = PApplet.loadStrings(input);
+            for (int i = 0; i < lines.length; i++) {
+                lines[i] = lines[i].replaceAll(" ", "");
             }
-        }
 
-        pushRock(3, 3);
+            rows = lines.length;
+            columns = lines[0].length();
+
+            cells = new CellStack[rows][columns];
+            for (int row = 0; row < rows; row++) {
+                for (int column = 0; column < columns; column++) {
+                    int value = Integer.parseInt(String.valueOf(lines[row].charAt(column)));
+                    cells[row][column] = new CellStack(new Empty(row, column));
+                    if (value == CellType.ROCK) {
+                        cells[row][column].push(new Rock(row, column));
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void pushRock(int row, int column) {
         Cell rock = new Rock(row, column);
         cells[rock.row][rock.column].push(rock);
+    }
+
+    public void pushOnRandomPosition(Kstror kstror) {
+        ArrayList<Integer> emptyCellsIds = new ArrayList<>();
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                if (cells[row][column].peek().type == CellType.EMPTY) {
+                    emptyCellsIds.add(cellsIds[row][column]);
+                }
+            }
+        }
+
+        int index = (int) (Math.random() * emptyCellsIds.size());
+        int newKstrorCellId = emptyCellsIds.get(index);
+
+        kstror.row = getCellRow(newKstrorCellId);
+        kstror.column = getCellColumn(newKstrorCellId);
+        push(kstror);
     }
 
     private void calculateCellsIds() {

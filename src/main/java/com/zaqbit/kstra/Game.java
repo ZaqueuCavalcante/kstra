@@ -9,13 +9,14 @@ public class Game extends PApplet {
     private Kstror kstror;
 
     public void settings() {
-        CIZE = 80;
-        size(880, 880);
+        maze = new Maze00Mini5x5();
 
-        maze = new Maze();
+        int[] mazeSizes = maze.getDrawSizes();
+        size(mazeSizes[0], mazeSizes[1]);
+        CIZE = mazeSizes[2];
 
-        kstror = new Kstror(5, 3);
-        maze.push(kstror);
+        kstror = new Kstror(0, 0);
+        maze.pushOnRandomPosition(kstror);
     }
 
     public void draw() {
