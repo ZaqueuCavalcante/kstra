@@ -1,5 +1,7 @@
 package com.zaqbit.kstra;
 
+import java.util.ArrayList;
+
 import processing.core.PConstants;
 
 public class Maze {
@@ -12,24 +14,22 @@ public class Maze {
     private boolean showCellsIds;
     private boolean showCellsTypes;
 
+    private Apple apple;
+
     public Maze() {
         loadInitialState();
         calculateCellsIds();
 
-        showCellsIds = false;
-        showCellsTypes = false;
+        apple = new Apple(0, 0);
+        pushApple();
     }
 
     public int getCellRow(int cellId) {
-        int cellRow = cellId / columns;
-
-        return cellRow;
+        return cellId / columns;
     }
 
     public int getCellColumn(int cellId) {
-        int cellColumn = cellId % columns;
-
-        return cellColumn;
+        return cellId % columns;
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -66,6 +66,24 @@ public class Maze {
 
     public void push(Cell cell) {
         cells[cell.row][cell.column].push(cell);
+    }
+
+    public void pushApple() {
+        ArrayList<Integer> emptyCellsIds = new ArrayList<>();
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                if (cells[row][column].peek().type == CellType.EMPTY) {
+                    emptyCellsIds.add(cellsIds[row][column]);
+                }
+            }
+        }
+
+        int index = (int) (Math.random() * emptyCellsIds.size());
+        int newAppleCellId = emptyCellsIds.get(index);
+
+        apple.row = getCellRow(newAppleCellId);
+        apple.column = getCellColumn(newAppleCellId);
+        push(apple);
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //

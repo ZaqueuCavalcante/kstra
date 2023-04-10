@@ -18,8 +18,8 @@ public class Kstror extends Cell {
         game.circle(column * gc + gc / 2, row * gc + gc / 2, gc / 2);
     }
 
-    public void updateNeighbors(int[] neighbors) {
-        this.neighbors = neighbors;
+    public void updateNeighbors(Maze maze) {
+        neighbors = maze.getNeighbors(row, column);
     }
 
     public boolean isParked() {
