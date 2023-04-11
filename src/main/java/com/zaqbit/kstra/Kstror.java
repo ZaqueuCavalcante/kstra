@@ -14,7 +14,7 @@ public class Kstror extends Cell {
         game.fill(200);
         game.rect(column * gc, row * gc, gc, gc, gc / 4);
 
-        game.fill(255, 102, 102);
+        game.fill(144, 238, 144);
         game.circle(column * gc + gc / 2, row * gc + gc / 2, gc / 1.50f);
     }
 
