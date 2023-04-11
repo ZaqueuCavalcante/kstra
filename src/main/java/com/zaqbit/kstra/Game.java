@@ -26,8 +26,14 @@ public class Game extends PApplet {
         fill(255);
         stroke(0);
 
-        translate(CIZE / 2, CIZE / 2);
         maze.draw(this);
+
+        if ((maze.portalA.x < mouseX && mouseX < maze.portalA.x + CIZE)
+                && (maze.portalA.y < mouseY && mouseY < maze.portalA.y + CIZE)) {
+            overPortalA = true;
+        } else {
+            overPortalA = false;
+        }
     }
 
     public void keyPressed() {
@@ -38,6 +44,40 @@ public class Game extends PApplet {
         if (keyCode >= 37 && keyCode <= 40) {
             handleInput();
         }
+    }
+
+    boolean overPortalA = false;
+    boolean lockedA = false;
+    int xOffset = 0;
+    int yOffset = 0;
+
+    public void mousePressed() {
+        if (overPortalA) {
+            lockedA = true;
+        } else {
+            lockedA = false;
+        }
+        xOffset = mouseX - maze.portalA.x;
+        yOffset = mouseY - maze.portalA.y;
+    }
+
+    public void mouseDragged() {
+        if (lockedA) {
+            maze.portalA.x = mouseX - xOffset;
+            maze.portalA.y = mouseY - yOffset;
+        }
+    }
+
+    public void mouseReleased() {
+        if (overPortalA) {
+            maze.portalA.x = 0;
+            maze.portalA.y = 0;
+
+            maze.portalA.row = (int) mouseY / CIZE;
+            maze.portalA.column = (int) mouseX / CIZE;
+        }
+
+        lockedA = false;
     }
 
     private void handleInput() {
