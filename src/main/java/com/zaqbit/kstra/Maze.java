@@ -21,6 +21,9 @@ public abstract class Maze {
 
     private Apple apple;
 
+    private Portal portalA;
+    private Portal portalB;
+
     public abstract int[] getDrawSizes();
 
     public Maze() {
@@ -28,6 +31,9 @@ public abstract class Maze {
         calculateCellsIds();
 
         apple = new Apple(-1, -1);
+
+        portalA = new Portal(0, 0);
+        portalB = new Portal(rows - 1, columns - 1);
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -150,6 +156,12 @@ public abstract class Maze {
                 drawCellType(game, row, column);
             }
         }
+
+        portalA.draw(game);
+        cells[portalA.row][portalA.column].peek().draw(game);
+
+        portalB.draw(game);
+        cells[portalB.row][portalB.column].peek().draw(game);
     }
 
     private void drawCell(Game game, int row, int column) {

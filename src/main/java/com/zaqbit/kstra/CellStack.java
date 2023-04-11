@@ -18,6 +18,10 @@ public class CellStack {
         return cells.peek();
     }
 
+    public Cell penult() {
+        return cells.elementAt(cells.size() - 2);
+    }
+
     public Cell pop() {
         return cells.pop();
     }

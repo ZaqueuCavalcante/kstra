@@ -7,9 +7,12 @@ public class Portal extends Cell {
     }
 
     public void draw(Game game) {
-        game.fill(75, 0, 130);
+        game.stroke(75, 0, 130);
+        game.strokeWeight(16);
 
         final int gc = game.CIZE;
         game.rect(column * gc, row * gc, gc, gc, gc / 4);
+
+        game.strokeWeight(1);
     }
 }
