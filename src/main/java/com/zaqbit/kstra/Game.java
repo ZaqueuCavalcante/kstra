@@ -28,12 +28,13 @@ public class Game extends PApplet {
 
         maze.draw(this);
 
-        if ((maze.portalA.x < mouseX && mouseX < maze.portalA.x + CIZE)
-                && (maze.portalA.y < mouseY && mouseY < maze.portalA.y + CIZE)) {
-            overPortalA = true;
-        } else {
-            overPortalA = false;
-        }
+        maze.portalA.mouseIsOver = mouseIsOver(maze.portalA);
+        maze.portalB.mouseIsOver = mouseIsOver(maze.portalB);
+    }
+
+    private boolean mouseIsOver(Portal portal) {
+        return (portal.x < mouseX && mouseX < portal.x + CIZE)
+                && (portal.y < mouseY && mouseY < portal.y + CIZE);
     }
 
     public void keyPressed() {
@@ -46,38 +47,84 @@ public class Game extends PApplet {
         }
     }
 
-    boolean overPortalA = false;
-    boolean lockedA = false;
-    int xOffset = 0;
-    int yOffset = 0;
-
     public void mousePressed() {
-        if (overPortalA) {
-            lockedA = true;
+        if (maze.portalA.mouseIsOver) {
+            maze.portalA.mouseIsLocked = true;
         } else {
-            lockedA = false;
+            maze.portalA.mouseIsLocked = false;
         }
-        xOffset = mouseX - maze.portalA.x;
-        yOffset = mouseY - maze.portalA.y;
+        maze.portalA.xOffset = mouseX - maze.portalA.x;
+        maze.portalA.yOffset = mouseY - maze.portalA.y;
+
+        if (maze.portalB.mouseIsOver) {
+            maze.portalB.mouseIsLocked = true;
+        } else {
+            maze.portalB.mouseIsLocked = false;
+        }
+        maze.portalB.xOffset = mouseX - maze.portalB.x;
+        maze.portalB.yOffset = mouseY - maze.portalB.y;
     }
 
     public void mouseDragged() {
-        if (lockedA) {
-            maze.portalA.x = mouseX - xOffset;
-            maze.portalA.y = mouseY - yOffset;
+        if (maze.portalA.mouseIsLocked) {
+            maze.portalA.x = mouseX - maze.portalA.xOffset;
+            maze.portalA.y = mouseY - maze.portalA.yOffset;
+        }
+
+        if (maze.portalB.mouseIsLocked) {
+            maze.portalB.x = mouseX - maze.portalB.xOffset;
+            maze.portalB.y = mouseY - maze.portalB.yOffset;
         }
     }
 
     public void mouseReleased() {
-        if (overPortalA) {
+        if (maze.portalA.mouseIsOver) {
             maze.portalA.x = 0;
             maze.portalA.y = 0;
 
             maze.portalA.row = (int) mouseY / CIZE;
             maze.portalA.column = (int) mouseX / CIZE;
-        }
 
-        lockedA = false;
+            if (maze.portalA.row < 0) {
+                maze.portalA.row = 0;
+            }
+            if (maze.portalA.row > maze.rows - 1) {
+                maze.portalA.row = maze.rows - 1;
+            }
+
+            if (maze.portalA.column < 0) {
+                maze.portalA.column = 0;
+            }
+            if (maze.portalA.column > maze.columns - 1) {
+                maze.portalA.column = maze.columns - 1;
+            }
+        }
+        maze.portalA.mouseIsLocked = false;
+
+        //
+
+        if (maze.portalB.mouseIsOver) {
+            maze.portalB.x = 0;
+            maze.portalB.y = 0;
+
+            maze.portalB.row = (int) mouseY / CIZE;
+            maze.portalB.column = (int) mouseX / CIZE;
+
+            if (maze.portalB.row < 0) {
+                maze.portalB.row = 0;
+            }
+            if (maze.portalB.row > maze.rows - 1) {
+                maze.portalB.row = maze.rows - 1;
+            }
+
+            if (maze.portalB.column < 0) {
+                maze.portalB.column = 0;
+            }
+            if (maze.portalB.column > maze.columns - 1) {
+                maze.portalB.column = maze.columns - 1;
+            }
+        }
+        maze.portalB.mouseIsLocked = false;
     }
 
     private void handleInput() {

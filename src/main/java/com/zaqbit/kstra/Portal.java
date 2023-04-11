@@ -6,6 +6,11 @@ public class Portal extends Cell {
     public int x;
     public int y;
 
+    boolean mouseIsOver = false;
+    boolean mouseIsLocked = false;
+    int xOffset = 0;
+    int yOffset = 0;
+
     public Portal(int row, int column) {
         super(row, column);
         type = CellType.PORTAL;
