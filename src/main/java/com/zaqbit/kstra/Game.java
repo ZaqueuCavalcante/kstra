@@ -9,7 +9,7 @@ public class Game extends PApplet {
     private Kstror kstror;
 
     public void settings() {
-        maze = new Maze00Wells5x5();
+        maze = new Maze00Mini5x5();
 
         int[] mazeSizes = maze.getDrawSizes();
         size(mazeSizes[0], mazeSizes[1]);

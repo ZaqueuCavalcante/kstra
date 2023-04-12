@@ -18,7 +18,7 @@ public class Portal extends Cell {
 
     public void draw(Game game) {
         game.stroke(75, 0, 130);
-        game.strokeWeight(16);
+        game.strokeWeight(8);
 
         final int gc = game.CIZE;
 
