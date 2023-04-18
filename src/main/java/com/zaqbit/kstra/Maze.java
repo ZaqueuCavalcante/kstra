@@ -19,7 +19,7 @@ public abstract class Maze {
     private boolean showCellsIds;
     private boolean showCellsTypes;
 
-    private Apple apple;
+    public Apple apple;
 
     public Portal portalA;
     public Portal portalB;

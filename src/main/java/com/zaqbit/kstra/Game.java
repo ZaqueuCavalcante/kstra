@@ -39,7 +39,69 @@ public class Game extends PApplet {
 
     public void keyPressed() {
         if (keyCode == 10) {
+            if (kstror.row == maze.portalA.row && kstror.column == maze.portalA.column) {
+                if (maze.cells[maze.portalB.row][maze.portalB.column].peek().type == CellType.ROCK) {
+                    return;
+                }
 
+                int oldRow = kstror.row;
+                int oldColumn = kstror.column;
+
+                kstror.row = maze.portalB.row;
+                kstror.column = maze.portalB.column;
+
+                if (kstror.row == oldRow && kstror.column == oldColumn) {
+                    return;
+                }
+
+                Cell belowCell = maze.cells[kstror.row][kstror.column].peek();
+
+                if (belowCell.type == CellType.EMPTY) {
+                    maze.cells[kstror.row][kstror.column].push(maze.cells[oldRow][oldColumn].pop());
+                } else if (belowCell.type == CellType.APPLE) {
+                    maze.cells[kstror.row][kstror.column].pop();
+
+                    maze.pushRock(kstror.row, kstror.column);
+
+                    maze.cells[kstror.row][kstror.column].push(maze.cells[oldRow][oldColumn].pop());
+
+                    maze.pushApple();
+                }
+
+                return;
+            }
+
+            if (kstror.row == maze.portalB.row && kstror.column == maze.portalB.column) {
+                if (maze.cells[maze.portalA.row][maze.portalA.column].peek().type == CellType.ROCK) {
+                    return;
+                }
+
+                int oldRow = kstror.row;
+                int oldColumn = kstror.column;
+
+                kstror.row = maze.portalA.row;
+                kstror.column = maze.portalA.column;
+
+                if (kstror.row == oldRow && kstror.column == oldColumn) {
+                    return;
+                }
+
+                Cell belowCell = maze.cells[kstror.row][kstror.column].peek();
+
+                if (belowCell.type == CellType.EMPTY) {
+                    maze.cells[kstror.row][kstror.column].push(maze.cells[oldRow][oldColumn].pop());
+                } else if (belowCell.type == CellType.APPLE) {
+                    maze.cells[kstror.row][kstror.column].pop();
+
+                    maze.pushRock(kstror.row, kstror.column);
+
+                    maze.cells[kstror.row][kstror.column].push(maze.cells[oldRow][oldColumn].pop());
+
+                    maze.pushApple();
+                }
+
+                return;
+            }
         }
 
         if (keyCode >= 37 && keyCode <= 40) {
